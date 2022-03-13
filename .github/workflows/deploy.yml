@@ -35,8 +35,8 @@ jobs:
           # 重启的脚本，根据自身情况做相应改动，一般要做的是migrate数据库以及重启服务器
           script: |
             cd /web/Matex_Be
-            yarn install
-            yarn build
+            npm install
+            npm run build
             pm2 stop all
             pm2 start app.js
 
