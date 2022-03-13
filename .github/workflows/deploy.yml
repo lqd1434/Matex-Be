@@ -26,16 +26,6 @@ jobs:
           TARGET: /web/Matex_Be/
       #   EXCLUDE: "/dist/, /node_modules/"
 
-      - name: install dependencies
-        run: |
-          echo start install dependencies
-          yarn install --network-timeout 100000
-
-      - name: Build project
-        run: |
-          echo build project
-          yarn build
-
       - name: Restart server   # 第五步，重启服务
         uses: appleboy/ssh-action@master
         with:
@@ -44,8 +34,21 @@ jobs:
           key: ${{ secrets.TOKEN }}
           # 重启的脚本，根据自身情况做相应改动，一般要做的是migrate数据库以及重启服务器
           script: |
-            cd /web/Matex_Be/dist
+            cd /web/Matex_Be
+            yarn install
+            yarn build
             pm2 stop all
             pm2 start app.js -i max
+
+#      - name: install dependencies
+#        run: |
+#          echo start install dependencies
+#          yarn install --network-timeout 100000
+#
+#      - name: Build project
+#        run: |
+#          echo build project
+#          yarn build
+
 
 
