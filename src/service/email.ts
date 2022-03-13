@@ -8,7 +8,6 @@ const transporter = nodemailer.createTransport({
 	secureConnection: true, // 使用SSL加密传输
 	auth: {
 		user: '1434288209@qq.com',
-		pass: 'tnlwemsvyfxsgfga',
 	},
 })
 
