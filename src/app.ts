@@ -4,6 +4,7 @@ import cors from 'cors'
 import * as path from 'path'
 const app = express()
 import router from './router/update'
+import fileUpload from 'express-fileupload'
 
 app.use('/assets', express.static(path.resolve(__dirname, '../public')))
 app.use(
@@ -13,6 +14,7 @@ app.use(
 	bodyParser.urlencoded({ extended: true }),
 )
 app.use(cors())
+app.use(fileUpload({}))
 
 app.use('/update', router)
 
