@@ -1,19 +1,29 @@
-import express from "express";
-import bodyParser from "body-parser";
-import cors from "cors";
-import * as path from "path";
-const app = express();
+import express from 'express'
+import bodyParser from 'body-parser'
+import cors from 'cors'
+import * as path from 'path'
+const app = express()
+import router from './router/update'
+import { sendEmail } from './service/email'
 
-app.use(express.static(path.resolve(__dirname, 'public')));
-app.use(bodyParser.json(),bodyParser.text(),bodyParser.raw(),bodyParser.urlencoded({ extended: true }));
+app.use('/assets', express.static(path.resolve(__dirname, '../public')))
+app.use(
+	bodyParser.json(),
+	bodyParser.text(),
+	bodyParser.raw(),
+	bodyParser.urlencoded({ extended: true }),
+)
 app.use(cors())
 
-app.get('/', (req, res) => {
+app.use('/update', router)
+
+app.get('/', async (req, res) => {
+	// await sendEmail()
 	res.send({
 		text: 'Hello World',
 	})
 })
 
 app.listen(7888, () => {
-	console.log("Server started on port 7888");
-});
+	console.log('Server started on port 7888')
+})

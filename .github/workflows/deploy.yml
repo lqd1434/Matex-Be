@@ -1,0 +1,56 @@
+name: Deploy
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js 14.x
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14.x'
+
+      - name: install dependencies
+        run: |
+          echo start install dependencies
+          yarn install --network-timeout 100000
+
+      - name: Build project
+        run: |
+          echo build project
+          yarn build
+
+      - name: deploy
+        uses: easingthemes/ssh-deploy@main
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.TOKEN }}
+          ARGS: "-avzr --delete"
+          SOURCE: ""
+          REMOTE_HOST: ${{ secrets.SSH_HOST }}
+          REMOTE_USER: ${{ secrets.SSH_USERNAME }}
+          TARGET: /Matex_Be/
+#          EXCLUDE: "/dist/, /node_modules/"
+
+#          accessKeyId: ${{ secrets.ACCESSKEYID }}
+#          accessKeySecret: ${{ secrets.ACCESSKEYSECRET }}
+#          bucket: registry-incu
+#          endpoint: oss-cn-beijing.aliyuncs.com
+#          skipSetting: true
+      - name: Restart server   # 第五步，重启服务
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}  # 下面三个配置与上一步类似
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.TOKEN }}
+          # 重启的脚本，根据自身情况做相应改动，一般要做的是migrate数据库以及重启服务器
+          script: |
+            cd /Matex_Be/dist
+            pm2 stop all
+            pm2 start app.js -i max
+
+
