@@ -46,7 +46,7 @@ jobs:
           script: |
             cd /web/Matex_Be
             pm2 stop all
-            pm2 start app.js
+            pm2 start ./dist/app.js
 
 
 
