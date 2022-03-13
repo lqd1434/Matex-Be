@@ -15,6 +15,16 @@ jobs:
         with:
           node-version: '14.x'
 
+      - name: install dependencies
+        run: |
+          echo start install dependencies
+          yarn install --network-timeout 100000
+
+      - name: Build project
+        run: |
+          echo build project
+          yarn build
+
       - name: upload
         uses: easingthemes/ssh-deploy@main
         env:
@@ -24,7 +34,7 @@ jobs:
           REMOTE_HOST: ${{ secrets.SSH_HOST }}
           REMOTE_USER: ${{ secrets.SSH_USERNAME }}
           TARGET: /web/Matex_Be/
-      #   EXCLUDE: "/dist/, /node_modules/"
+          #   EXCLUDE: "/dist/, /node_modules/"
 
       - name: Restart server   # 第五步，重启服务
         uses: appleboy/ssh-action@master
@@ -35,20 +45,8 @@ jobs:
           # 重启的脚本，根据自身情况做相应改动，一般要做的是migrate数据库以及重启服务器
           script: |
             cd /web/Matex_Be
-            npm install
-            npm run build
             pm2 stop all
             pm2 start app.js
-
-#      - name: install dependencies
-#        run: |
-#          echo start install dependencies
-#          yarn install --network-timeout 100000
-#
-#      - name: Build project
-#        run: |
-#          echo build project
-#          yarn build
 
 
 
