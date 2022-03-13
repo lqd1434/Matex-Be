@@ -4,7 +4,6 @@ import cors from 'cors'
 import * as path from 'path'
 const app = express()
 import router from './router/update'
-import { sendEmail } from './service/email'
 
 app.use('/assets', express.static(path.resolve(__dirname, '../public')))
 app.use(

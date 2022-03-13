@@ -33,7 +33,7 @@ jobs:
           SOURCE: ""
           REMOTE_HOST: ${{ secrets.SSH_HOST }}
           REMOTE_USER: ${{ secrets.SSH_USERNAME }}
-          TARGET: /Matex_Be/
+          TARGET: /web/Matex_Be/
 #          EXCLUDE: "/dist/, /node_modules/"
 
 #          accessKeyId: ${{ secrets.ACCESSKEYID }}
@@ -49,7 +49,7 @@ jobs:
           key: ${{ secrets.TOKEN }}
           # 重启的脚本，根据自身情况做相应改动，一般要做的是migrate数据库以及重启服务器
           script: |
-            cd /Matex_Be/dist
+            cd /web/Matex_Be/dist
             pm2 stop all
             pm2 start app.js -i max
 
