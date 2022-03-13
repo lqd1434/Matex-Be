@@ -38,7 +38,7 @@ jobs:
             yarn install
             yarn build
             pm2 stop all
-            pm2 start app.js -i max
+            pm2 start app.js
 
 #      - name: install dependencies
 #        run: |
