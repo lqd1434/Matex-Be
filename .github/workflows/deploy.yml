@@ -15,6 +15,17 @@ jobs:
         with:
           node-version: '14.x'
 
+      - name: upload
+        uses: easingthemes/ssh-deploy@main
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.TOKEN }}
+          ARGS: "-avzr --delete"
+          SOURCE: ""
+          REMOTE_HOST: ${{ secrets.SSH_HOST }}
+          REMOTE_USER: ${{ secrets.SSH_USERNAME }}
+          TARGET: /web/Matex_Be/
+      #   EXCLUDE: "/dist/, /node_modules/"
+
       - name: install dependencies
         run: |
           echo start install dependencies
@@ -25,22 +36,6 @@ jobs:
           echo build project
           yarn build
 
-      - name: deploy
-        uses: easingthemes/ssh-deploy@main
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.TOKEN }}
-          ARGS: "-avzr --delete"
-          SOURCE: ""
-          REMOTE_HOST: ${{ secrets.SSH_HOST }}
-          REMOTE_USER: ${{ secrets.SSH_USERNAME }}
-          TARGET: /web/Matex_Be/
-#          EXCLUDE: "/dist/, /node_modules/"
-
-#          accessKeyId: ${{ secrets.ACCESSKEYID }}
-#          accessKeySecret: ${{ secrets.ACCESSKEYSECRET }}
-#          bucket: registry-incu
-#          endpoint: oss-cn-beijing.aliyuncs.com
-#          skipSetting: true
       - name: Restart server   # 第五步，重启服务
         uses: appleboy/ssh-action@master
         with:
