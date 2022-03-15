@@ -16,12 +16,20 @@ router.get('/check', function (req, res) {
 
 router.post('/uploadWin', (req: any, res) => {
 	try {
-		const { name, data } = req.files.file
-		console.log(name, 'uploadWin')
-		console.log(data, 'uploadWin')
-		const filepath = path.resolve(process.cwd(), './public/zip/win' + name)
-		fs.writeFile(filepath, data, () => {
-			console.log('文件写入成功')
+		const chunks: any[] = []
+		let size = 0
+		req.on('data', (chunk: string | any[]) => {
+			chunks.push(chunk)
+			size += chunk.length
+		})
+
+		req.on('end', () => {
+			console.log(chunks)
+			console.log(size)
+			const filepath = path.resolve(process.cwd(), './public/zip/win/win.zip')
+			fs.writeFile(filepath, Buffer.concat(chunks), () => {
+				console.log('写入成功')
+			})
 			res.send({
 				status: 200,
 				data: '文件上传成功',
