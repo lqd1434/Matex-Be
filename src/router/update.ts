@@ -25,9 +25,12 @@ router.post('/uploadWin', (req: any, res) => {
 
 		req.on('end', () => {
 			console.log(size)
-			const filepath = path.resolve(process.cwd(), './public/zip/win/win.zip')
+			const filepath = path.resolve(process.cwd(), '../update_asserts/win/')
+			if (!fs.existsSync(filepath)) {
+				fs.mkdirSync(filepath)
+			}
 			console.log(filepath)
-			fs.writeFile(filepath, Buffer.concat(chunks), () => {
+			fs.writeFile(filepath + 'win.zip', Buffer.concat(chunks), () => {
 				console.log('写入成功')
 			})
 			res.send({
