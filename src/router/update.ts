@@ -5,7 +5,7 @@ const router = express.Router()
 
 // middleware that is specific to this router
 router.use(function timeLog(req, res, next) {
-	console.log('Time: ', Date.now())
+	console.log('收到请求: ', Date.now().toLocaleString())
 	next()
 })
 
@@ -24,9 +24,9 @@ router.post('/uploadWin', (req: any, res) => {
 		})
 
 		req.on('end', () => {
-			console.log(chunks)
 			console.log(size)
 			const filepath = path.resolve(process.cwd(), './public/zip/win/win.zip')
+			console.log(filepath)
 			fs.writeFile(filepath, Buffer.concat(chunks), () => {
 				console.log('写入成功')
 			})
