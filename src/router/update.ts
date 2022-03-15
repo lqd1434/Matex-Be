@@ -35,14 +35,47 @@ router.post('/uploadWin', (req: any, res) => {
 			})
 			res.send({
 				status: 200,
-				data: '文件上传成功',
+				data: 'win文件上传成功',
 			})
 		})
 	} catch (error) {
 		console.log(error)
 		res.send({
 			status: 500,
-			data: '文件写入失败',
+			data: 'win文件写入失败',
+		})
+	}
+})
+
+router.post('/uploadMac', (req: any, res) => {
+	try {
+		const chunks: any[] = []
+		let size = 0
+		req.on('data', (chunk: string | any[]) => {
+			chunks.push(chunk)
+			size += chunk.length
+		})
+
+		req.on('end', () => {
+			console.log(size)
+			const filepath = path.resolve(process.cwd(), '../update_asserts/mac')
+			if (!fs.existsSync(filepath)) {
+				fs.mkdirSync(filepath)
+			}
+			console.log(filepath)
+			fs.writeFile(filepath + '/mac.zip', Buffer.concat(chunks), () => {
+				console.log('写入成功')
+			})
+			res.send({
+				status: 200,
+				data: 'mac文件上传成功',
+			})
+		})
+	} catch (error) {
+		console.log(error)
+		res.send({
+			status: 500,
+			data: 'mac文件写入失败',
 		})
 	}
 })
