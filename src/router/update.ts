@@ -17,6 +17,8 @@ router.get('/check', function (req, res) {
 router.post('/uploadWin', (req: any, res) => {
 	try {
 		const { name, data } = req.files.file
+		console.log(name, 'uploadWin')
+		console.log(data, 'uploadWin')
 		const filepath = path.resolve(process.cwd(), './public/zip/win' + name)
 		fs.writeFile(filepath, data, () => {
 			console.log('文件写入成功')
