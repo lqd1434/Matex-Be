@@ -9,9 +9,25 @@ router.use(function timeLog(req, res, next) {
 	next()
 })
 
-// define the home page route
 router.get('/check', function (req, res) {
 	res.send('Birds home page')
+})
+
+router.post('/metadata', function (req, res) {
+	const metadata = req.body
+	console.log(metadata)
+	// try {
+	// 	fs.writeFileSync(path.resolve(process.cwd(), './update/updateMac.json'), versionInfo)
+	// 	res.send({
+	// 		code: 200,
+	// 		msg: '更新成功',
+	// 	})
+	// } catch (e) {
+	// 	res.send({
+	// 		code: 200,
+	// 		msg: '更新失败',
+	// 	})
+	// }
 })
 
 router.post('/uploadWin', (req: any, res) => {
@@ -24,7 +40,6 @@ router.post('/uploadWin', (req: any, res) => {
 		})
 
 		req.on('end', () => {
-			console.log(size)
 			const filepath = path.resolve(process.cwd(), '../update_asserts/win')
 			if (!fs.existsSync(filepath)) {
 				fs.mkdirSync(filepath)
