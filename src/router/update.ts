@@ -13,11 +13,11 @@ router.use(function timeLog(req, res, next) {
 	next()
 })
 
-router.get('/check', function (req, res) {
+router.get('/check', async (req, res) => {
 	try {
-		const metadata = readJson(
+		const metadata = (await readJson(
 			path.resolve(process.cwd(), './public/update/update.json'),
-		) as unknown as MetaDate
+		)) as MetaDate
 		console.log(metadata)
 		res.send({
 			code: 200,
