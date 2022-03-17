@@ -3,3 +3,9 @@ export interface MatexRes<T> {
 	desc: string
 	data: T
 }
+
+export interface MetaDate {
+	version: string
+	size: string
+	os: 'mac' | 'win'
+}

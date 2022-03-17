@@ -1,7 +1,8 @@
 import express from 'express'
 import path from 'path'
 import fs from 'fs'
-import { writeJson } from '../service/update'
+import { readJson, writeJson } from '../service/update'
+import { MetaDate } from '../type/res'
 
 const router = express.Router()
 
@@ -12,7 +13,11 @@ router.use(function timeLog(req, res, next) {
 })
 
 router.get('/check', function (req, res) {
-	res.send('Birds home page')
+	const metadata = readJson(
+		path.resolve(process.cwd(), './update/updateMac.json'),
+	) as unknown as MetaDate
+	console.log(metadata)
+	res.send(metadata)
 })
 
 router.post('/metadata', async (req, res) => {
