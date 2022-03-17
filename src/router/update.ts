@@ -63,6 +63,7 @@ router.post('/uploadWin', (req: any, res) => {
 		})
 
 		req.on('end', () => {
+			console.log('size', size)
 			const filepath = path.resolve(process.cwd(), '../update_asserts/win')
 			if (!fs.existsSync(filepath)) {
 				fs.mkdirSync(filepath)
