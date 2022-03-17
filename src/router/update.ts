@@ -1,6 +1,8 @@
 import express from 'express'
 import path from 'path'
 import fs from 'fs'
+import { writeJson } from '../service/update'
+
 const router = express.Router()
 
 // middleware that is specific to this router
@@ -13,21 +15,21 @@ router.get('/check', function (req, res) {
 	res.send('Birds home page')
 })
 
-router.post('/metadata', function (req, res) {
-	const metadata = req.body
+router.post('/metadata', async (req, res) => {
+	const metadata = JSON.parse(req.body)
 	console.log(metadata)
-	// try {
-	// 	fs.writeFileSync(path.resolve(process.cwd(), './update/updateMac.json'), versionInfo)
-	// 	res.send({
-	// 		code: 200,
-	// 		msg: '更新成功',
-	// 	})
-	// } catch (e) {
-	// 	res.send({
-	// 		code: 200,
-	// 		msg: '更新失败',
-	// 	})
-	// }
+	try {
+		await writeJson(path.resolve(process.cwd(), './update/updateMac.json'), metadata)
+		res.send({
+			code: 200,
+			msg: '更新成功',
+		})
+	} catch (e: any) {
+		res.send({
+			code: 500,
+			msg: e.toString(),
+		})
+	}
 })
 
 router.post('/uploadWin', (req: any, res) => {
@@ -57,7 +59,7 @@ router.post('/uploadWin', (req: any, res) => {
 		console.log(error)
 		res.send({
 			status: 500,
-			data: 'win文件写入失败',
+			data: 'win文件写入失败' + error,
 		})
 	}
 })
