@@ -1,14 +1,15 @@
 import express from 'express'
 import path from 'path'
 import fs from 'fs'
-import { readJson, writeJson } from '../service/update'
 import { MetaDate } from '../type/res'
+import { readJson, writeJson } from '../utils/jsonOpt'
+import { matexTime } from '../utils/time'
 
 const router = express.Router()
 
 // middleware that is specific to this router
 router.use(function timeLog(req, res, next) {
-	console.log('收到请求: ', Date.now().toLocaleString())
+	console.log('收到请求: ', matexTime().format('YYYY-MM-DD HH:mm:ss'))
 	next()
 })
 
