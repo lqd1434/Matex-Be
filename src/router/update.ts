@@ -14,18 +14,33 @@ router.use(function timeLog(req, res, next) {
 })
 
 router.get('/check', function (req, res) {
-	const metadata = readJson(
-		path.resolve(process.cwd(), './update/updateMac.json'),
-	) as unknown as MetaDate
-	console.log(metadata)
-	res.send(metadata)
+	try {
+		const metadata = readJson(
+			path.resolve(process.cwd(), './public/update/updateMac.json'),
+		) as unknown as MetaDate
+		console.log(metadata)
+		res.send({
+			code: 200,
+			data: metadata,
+		})
+	} catch (error) {
+		res.send({
+			code: 500,
+			data: '检查更新失败' + error,
+		})
+	}
 })
 
 router.post('/metadata', async (req, res) => {
-	const metadata = JSON.parse(req.body)
+	const metadata = req.body
 	console.log(metadata)
+	const metadataPath = path.resolve(process.cwd(), './public/update/updateMac.json')
+	if (!fs.existsSync(metadataPath)) {
+		fs.writeFileSync(metadataPath, '')
+	}
 	try {
-		await writeJson(path.resolve(process.cwd(), './update/updateMac.json'), metadata)
+		await writeJson(metadataPath, metadata)
+		console.log('更新成功')
 		res.send({
 			code: 200,
 			msg: '更新成功',
