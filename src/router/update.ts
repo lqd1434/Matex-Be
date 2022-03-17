@@ -16,7 +16,7 @@ router.use(function timeLog(req, res, next) {
 router.get('/check', function (req, res) {
 	try {
 		const metadata = readJson(
-			path.resolve(process.cwd(), './public/update/updateMac.json'),
+			path.resolve(process.cwd(), './public/update/update.json'),
 		) as unknown as MetaDate
 		console.log(metadata)
 		res.send({
@@ -34,7 +34,7 @@ router.get('/check', function (req, res) {
 router.post('/metadata', async (req, res) => {
 	const metadata = req.body
 	console.log(metadata)
-	const metadataPath = path.resolve(process.cwd(), './public/update/updateMac.json')
+	const metadataPath = path.resolve(process.cwd(), './public/update/update.json')
 	if (!fs.existsSync(metadataPath)) {
 		fs.writeFileSync(metadataPath, '')
 	}
