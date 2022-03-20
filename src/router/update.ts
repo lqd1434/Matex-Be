@@ -1,23 +1,29 @@
 import express from 'express'
 import path from 'path'
 import fs from 'fs'
-import { MetaDate } from '../type/res'
+import { ReceivedMetaDate } from '../type/res'
 import { readJson, writeJson } from '../utils/jsonOpt'
 import { matexTime } from '../utils/time'
 
 const router = express.Router()
+const winPath = path.resolve(process.cwd(), '../update_asserts/win/win.json')
+const macPath = path.resolve(process.cwd(), '../update_asserts/mac/mac.json')
 
-// middleware that is specific to this router
-router.use(function timeLog(req, res, next) {
-	console.log('收到请求: ', matexTime().format('YYYY-MM-DD HH:mm:ss'))
+router.use((req, res, next) => {
+	console.log('收到请求: ' + req.path, matexTime().format('YYYY-MM-DD HH:mm:ss'))
 	next()
 })
 
 router.get('/check', async (req, res) => {
+	const os = req.query.os
+	let infoPath = ''
+	if (os === 'win') {
+		infoPath = winPath
+	} else {
+		infoPath = macPath
+	}
 	try {
-		const metadata = (await readJson(
-			path.resolve(process.cwd(), './public/update/update.json'),
-		)) as MetaDate
+		const metadata = (await readJson(infoPath)) as ReceivedMetaDate
 		console.log(metadata)
 		res.send({
 			code: 200,
@@ -26,24 +32,29 @@ router.get('/check', async (req, res) => {
 	} catch (error) {
 		res.send({
 			code: 500,
-			data: '检查更新失败' + error,
+			data: '检查更新失败:' + error,
 		})
 	}
 })
 
 router.post('/metadata', async (req, res) => {
-	const metadata = req.body
+	const metadata = req.body as ReceivedMetaDate
 	console.log(metadata)
-	const metadataPath = path.resolve(process.cwd(), './public/update/update.json')
-	if (!fs.existsSync(metadataPath)) {
-		fs.writeFileSync(metadataPath, '')
+	let versionPath
+	if (metadata.os === 'win') {
+		versionPath = winPath
+	} else {
+		versionPath = macPath
+	}
+	if (!fs.existsSync(versionPath)) {
+		fs.writeFileSync(versionPath, '')
 	}
 	try {
-		await writeJson(metadataPath, metadata)
+		await writeJson(versionPath, metadata)
 		console.log('更新成功')
 		res.send({
 			code: 200,
-			msg: '更新成功',
+			msg: '更新版本信息成功',
 		})
 	} catch (e: any) {
 		res.send({

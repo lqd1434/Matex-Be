@@ -4,8 +4,9 @@ export interface MatexRes<T> {
 	data: T
 }
 
-export interface MetaDate {
+export interface ReceivedMetaDate {
 	version: string
 	size: string
-	os: 'mac' | 'win'
+	os: 'win' | 'mac'
+	update_time: string
 }
